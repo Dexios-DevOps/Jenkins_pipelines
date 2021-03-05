@@ -1,0 +1,43 @@
+pipeline {
+agent
+    {
+        node {
+                label 'master'
+                customWorkspace "${env.JobPath}"
+              }
+    }
+    stages 
+    {
+        stage('Start') {
+            steps {
+                echo 'Hello'
+            }
+        }
+        stage ('Invoke_pipelineA') {
+            steps {
+                build job: 'pipelineA', parameters: [
+                string(name: 'param1', value: "value1")
+                ]
+            }
+        }
+        stage('End') {
+            steps {
+                echo 'Bye'
+            }
+        }
+    }
+}
+
+
+==================================================
+
+
+build job: '<Project name>', propagate: true, wait: true
+
+build job: '<Project name>', parameters: [[$class: 'StringParameterValue', name: 'param1', value: 'test_param']]
+
+===================================================
+
+You can follow the below steps to trigger a Jenkins pipeline in another Jenkins pipeline.
+
+Select a job that triggers a remote one and then go to Job Configuration > Build section > Add Build Step > Trigger builds on remote/local projects option. This configuration allows you to trigger another exciting job on a different CM (remote). The downstream job name part will autocomplete.
